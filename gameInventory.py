@@ -3,13 +3,10 @@
 
 # Displays the inventory.
 def display_inventory(inventory):
-    lista = list(inventory.values())
-    lista2 = list(inventory.keys())
     print('Inventory: ')
-    for i in range(len(lista)):
-        print(lista[i], lista2[i])
-    print('total number of items:', sum(inventory.values()))    
-
+    for key, value in inventory.items():
+        print(value, key)
+    print('total number of items:', sum(inventory.values()))
 
 # Adds to the inventory dictionary a list of items from added_items.
 def add_to_inventory(inventory, added_items):
@@ -32,30 +29,23 @@ def print_table(inventory, order=None):
     temp = len('item name')
     temp1 = len('count')
     a = '-'
-    lista = []
-    lista2 = []
     l=list(inventory.items())
     if order == "count,asc":
         l = sorted(inventory.items(), key=lambda kv: kv[1])
     elif order == "count,desc":
-        l = sorted(inventory.items(), key=lambda kv: kv[1],reverse=True)
+        l = sorted(inventory.items(), key=lambda kv: kv[1], reverse=True)    
     for i in l:
-        lista2.append(i[0])
-        lista.append(i[1])
-    for i in inventory.values():
-        if len(str(i)) > temp1:
-            temp1 = len(str(i))
-    for i in inventory.keys():
-        if len(i) > temp:
+        if len(i[0]) > temp:
             temp = len(i)
+        if len(str(i[1])) > temp1:
+            temp1 = len(str(i))
     print('Inventory: ')
     print(' count', (temp - len('item name')) * ' ', 'item name')
     print(18 * a)
-    for i in range(len(lista)):
-        print((temp1 - len(str(lista[i]))) * ' ', lista[i], (temp - len(lista2[i])) * ' ', lista2[i])
+    for i in l:
+        print((temp1 - len(str(i[1]))) * ' ', i[1], (temp - len(i[0])) * ' ', i[0])
     print(18 * a)
     print('total number of items:', sum(inventory.values()))
-
 
 
 
@@ -71,7 +61,7 @@ def import_inventory(inventory, filename="import_inventory.csv"):
         line=file.readlines()
         list_of_items = line[0].split(',')
         print(list_of_items)
-        return add_to_inventory(list_of_items, inventory)
+        return add_to_inventory(inventory, list_of_items)
     except FileNotFoundError:
         return inventory
 
@@ -101,7 +91,7 @@ def main():
     inv = {'rope': 1, 'torch': 6, 'gold coin': 42, 'dagger': 1, 'arrow': 12}
     display_inventory(inv)
     dragon_loot = ['gold coin', 'dagger', 'gold coin', 'gold coin', 'ruby']
-    inv = add_to_inventory(dragon_loot, inv)
+    inv = add_to_inventory(inv, dragon_loot)
     display_inventory(inv)
     print_table(inv)
     print_table(inv,"count,desc")
@@ -110,3 +100,4 @@ def main():
     print_table(inv)
     export_inventory(inv, "new_export.csv")
 
+# main()
