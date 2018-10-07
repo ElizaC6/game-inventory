@@ -61,6 +61,7 @@ def import_inventory(inventory, filename="import_inventory.csv"):
         line=file.readlines()
         list_of_items = line[0].split(',')
         print(list_of_items)
+        file.close()
         return add_to_inventory(inventory, list_of_items)
     except FileNotFoundError:
         return inventory
